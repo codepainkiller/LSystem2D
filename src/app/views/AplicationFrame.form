@@ -124,6 +124,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane1" pref="305" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
+                          <Component id="btnGenerateProd" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="btnAnimation" min="-2" pref="129" max="-2" attributes="0"/>
                       </Group>
@@ -149,7 +150,10 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jTextField1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnAnimation" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnAnimation" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnGenerateProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace pref="30" max="32767" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -182,7 +186,9 @@
             <Component class="javax.swing.JTextArea" name="txaLogs">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
+                <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
+                <Property name="wrapStyleWord" type="boolean" value="true"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -193,6 +199,14 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Logs:"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnGenerateProd">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Generar producciones"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerateProdActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

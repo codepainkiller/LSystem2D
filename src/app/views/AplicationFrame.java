@@ -1,19 +1,12 @@
 package app.views;
 
+import app.algorithms.LSystemProduction;
 import app.scenes.CubeTexture;
 import com.jogamp.opengl.util.FPSAnimator;
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.DisplayMode;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
+import java.util.Vector;
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
-import javax.media.opengl.awt.GLJPanel;
-import javax.media.opengl.glu.GLU;
-import javax.swing.JPanel;
 
 
 public class AplicationFrame extends javax.swing.JFrame  {
@@ -25,12 +18,31 @@ public class AplicationFrame extends javax.swing.JFrame  {
     private int widthCanvas;
     private int heightCanvas;
     private boolean animationScene;
+    
+    private LSystemProduction productions;
+    
+    private static final int NUM_PRODUCTIONS = 6;
+  
    
     public AplicationFrame() {
        
         initComponents();
         
         this.initScene();
+        this.createProductions();
+    }
+    
+    private void createProductions() {
+        
+        Vector<String> rules = new Vector<>();
+        String axiom = "F";
+        
+        rules.add("F[+F]F[-F]F");
+        rules.add("F[+F]F");
+        rules.add("F[-F]F");
+        
+        productions = new LSystemProduction(axiom, rules, NUM_PRODUCTIONS);
+        productions.start();  
     }
 
     private void initScene() {
@@ -72,6 +84,7 @@ public class AplicationFrame extends javax.swing.JFrame  {
         txaLogs = new javax.swing.JTextArea();
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        btnGenerateProd = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -104,10 +117,19 @@ public class AplicationFrame extends javax.swing.JFrame  {
         });
 
         txaLogs.setColumns(20);
+        txaLogs.setLineWrap(true);
         txaLogs.setRows(5);
+        txaLogs.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txaLogs);
 
         jLabel1.setText("Logs:");
+
+        btnGenerateProd.setText("Generar producciones");
+        btnGenerateProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateProdActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -118,6 +140,7 @@ public class AplicationFrame extends javax.swing.JFrame  {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnGenerateProd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAnimation, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTextField3)
@@ -138,7 +161,9 @@ public class AplicationFrame extends javax.swing.JFrame  {
                 .addGap(18, 18, 18)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnAnimation)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAnimation)
+                    .addComponent(btnGenerateProd))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -200,8 +225,18 @@ public class AplicationFrame extends javax.swing.JFrame  {
             animator.stop();
             this.btnAnimation.setText("Start animation!");
         }
-
+        
     }//GEN-LAST:event_btnAnimationActionPerformed
+
+    private void btnGenerateProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateProdActionPerformed
+        String cad = "";
+        
+        for (int i = 0; i < productions.getProductions().size(); i++) {
+            cad += productions.getProduction(i) + "\n\n";
+        }
+        
+        this.txaLogs.setText(cad);
+    }//GEN-LAST:event_btnGenerateProdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,6 +275,7 @@ public class AplicationFrame extends javax.swing.JFrame  {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnimation;
+    private javax.swing.JButton btnGenerateProd;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
