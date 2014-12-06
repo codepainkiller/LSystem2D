@@ -1,21 +1,13 @@
-#ant specific
-dist/
+### NetBeans ###
+
+nbproject/private/
+nbproject/build-impl.xml
+nbproject/genfiles.properties
+
 build/
- 
-#netbeans specific
-core
-nbproject/*
-!nbproject/project.properties
-!nbproject/project.xml
- 
-#java specific
-*.class
- 
-#general swap/backup files
-*.so
-*.log
-*.out
-*~
-*.swp
-*.DS_Store
-*.lock
+dist/
+
+build.xml
+
+
+
