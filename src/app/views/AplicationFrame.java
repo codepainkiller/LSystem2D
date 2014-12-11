@@ -1,6 +1,8 @@
 package app.views;
 
+import app.algorithms.LSystemDraw;
 import app.algorithms.LSystemProduction;
+import app.algorithms.RenderShapes;
 import app.scenes.CubeTexture;
 import com.jogamp.opengl.util.FPSAnimator;
 import java.util.Vector;
@@ -42,7 +44,9 @@ public class AplicationFrame extends javax.swing.JFrame  {
         rules.add("F[-F]F");
         
         productions = new LSystemProduction(axiom, rules, NUM_PRODUCTIONS);
-        productions.start();  
+        productions.start();
+        
+        LSystemDraw lsd = new LSystemDraw(rules, 25.7f);
     }
 
     private void initScene() {
@@ -59,8 +63,12 @@ public class AplicationFrame extends javax.swing.JFrame  {
         glcanvas.setSize(widthCanvas, heightCanvas);
         
         // Load scene and add to canvas
-        CubeTexture cubeTexture = new CubeTexture();
-        glcanvas.addGLEventListener(cubeTexture);
+        //CubeTexture cubeTexture = new CubeTexture();
+        //glcanvas.addGLEventListener(cubeTexture);
+        //RenderShapes shape = new RenderShapes();
+        //glcanvas.addGLEventListener(shape);
+        
+        
         
         // Add scene panel
         pnlRender.add(glcanvas);
@@ -100,7 +108,7 @@ public class AplicationFrame extends javax.swing.JFrame  {
         pnlRender.setLayout(pnlRenderLayout);
         pnlRenderLayout.setHorizontalGroup(
             pnlRenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 484, Short.MAX_VALUE)
+            .addGap(0, 661, Short.MAX_VALUE)
         );
         pnlRenderLayout.setVerticalGroup(
             pnlRenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,7 +172,7 @@ public class AplicationFrame extends javax.swing.JFrame  {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAnimation)
                     .addComponent(btnGenerateProd))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)

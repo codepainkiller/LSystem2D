@@ -11,6 +11,7 @@ public class Cube implements GLEventListener{
    public static DisplayMode dm, dm_old;
    private GLU glu = new GLU();
    private float rquad=0.0f;
+   
    @Override
    public void display( GLAutoDrawable drawable ) {
       final GL2 gl = drawable.getGL().getGL2();
