@@ -25,6 +25,7 @@ public class LSystemProduction extends Thread {
 
             // Generating random number between 0 and 1
             float randProd = (float) Math.random();
+            System.out.println("rand: " + randProd);
 
             if (randProd > 0.0f && randProd <= 0.33f) {
                 word = word.replaceAll("F", rules.get(0));
@@ -36,10 +37,9 @@ public class LSystemProduction extends Thread {
                 System.out.println("Ninguno");
             }
 
-            System.out.println("Add word (" + i + "): " + word);
+            //System.out.println("Add word (" + i + "): " + word);
             productions.add(word);
         }
-
     }
 
     public String getProduction(int i) {

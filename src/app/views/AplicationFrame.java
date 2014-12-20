@@ -22,8 +22,9 @@ public class AplicationFrame extends javax.swing.JFrame  {
     private boolean animationScene;
     
     private LSystemProduction productions;
+    private LSystemDraw lsd;
     
-    private static final int NUM_PRODUCTIONS = 6;
+    private static final int NUM_PRODUCTIONS = 4;
   
    
     public AplicationFrame() {
@@ -45,8 +46,6 @@ public class AplicationFrame extends javax.swing.JFrame  {
         
         productions = new LSystemProduction(axiom, rules, NUM_PRODUCTIONS);
         productions.start();
-        
-        LSystemDraw lsd = new LSystemDraw(rules, 25.7f);
     }
 
     private void initScene() {
@@ -65,11 +64,8 @@ public class AplicationFrame extends javax.swing.JFrame  {
         // Load scene and add to canvas
         //CubeTexture cubeTexture = new CubeTexture();
         //glcanvas.addGLEventListener(cubeTexture);
-        //RenderShapes shape = new RenderShapes();
-        //glcanvas.addGLEventListener(shape);
         
-        
-        
+      
         // Add scene panel
         pnlRender.add(glcanvas);
         this.pack();
@@ -233,7 +229,6 @@ public class AplicationFrame extends javax.swing.JFrame  {
             animator.stop();
             this.btnAnimation.setText("Start animation!");
         }
-        
     }//GEN-LAST:event_btnAnimationActionPerformed
 
     private void btnGenerateProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateProdActionPerformed
@@ -244,6 +239,9 @@ public class AplicationFrame extends javax.swing.JFrame  {
         }
         
         this.txaLogs.setText(cad);
+        lsd = new LSystemDraw(productions.getProductions(), 25.7f);
+        glcanvas.addGLEventListener(lsd);
+        glcanvas.display();
     }//GEN-LAST:event_btnGenerateProdActionPerformed
 
     /**

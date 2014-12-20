@@ -21,80 +21,92 @@ public class LSystemDraw implements GLEventListener{
     }
 
     @Override
-    public void init(GLAutoDrawable glad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void init(GLAutoDrawable drawable) {
+       
     }
 
     @Override
-    public void dispose(GLAutoDrawable glad) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void dispose(GLAutoDrawable drawable) {
+        
     }
 
     @Override
-    public void display(GLAutoDrawable glad) {
-        this.autoDrawable = glad;
-        this.draw(productions.get(3), 0, 0);
+    public void display(GLAutoDrawable drawable) {
+        this.autoDrawable = drawable;
+        final GL2 gl = this.autoDrawable.getGL().getGL2();
+        
+        gl.glClearColor(0, 0, 0, 1);
+        //this.drawEjes();
+        
+        gl.glPushMatrix();
+        gl.glScalef(0.04f, 0.04f, 0.04f);
+        gl.glColor3f(0, 1, 0);
+        this.drawLSystem(productions.get(4), 1, -25);
+        gl.glPopMatrix();
     }
 
     @Override
-    public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void reshape(GLAutoDrawable drawable, int i, int i1, int i2, int i3) {
+        
     }
     
     private class Node {
-        public float x = 0.0f;
-        public float y = 0.0f;
-        public float angle = 0.0f;
+        public double x_ = 0.0f;
+        public double y_ = 0.0f;
+        public double angle_ = 0.0f;
     }
     
-    private void drawLine(float x1, float y1, float x2, float y2) {
+    private void drawLine(double x1, double y1, double x2, double y2) {
         
         final GL2 gl = this.autoDrawable.getGL().getGL2();
+ 
+        gl.glBegin(GL2.GL_LINES);
         
-        gl.glBegin(GL2.GL_LINE);
-        gl.glVertex3f(x1, y1, 0);
-        gl.glVertex3f(x2, y2, 0);
+        gl.glVertex3d(x1, y1, 0);
+        gl.glVertex3d(x2, y2, 0);
         gl.glEnd();
     }
     
-    public void draw(String word, float initX, float initY) {
+    public void drawLSystem(String word, double initX, double initY) {
         
-        float rotAngle = 0.0f;
-        float xo = initX;
-        float yo = initY;
-        float xf = xo;
-        float yf = yo;
+        double rotAngle = 90.0f;
+        double xo = initX;
+        double yo = initY;
+        double xf = xo;
+        double yf = yo;
         
         Stack<Node> nodes = new Stack<>();
-        Node currentNode = new Node();
+        
         
         int  i = 0;
         
         while ( i < word.length() ) {
-            
+ 
             switch ( word.charAt(i) ) {
                 
                 case 'F' :
-                    xf = (float) (xo + 0.1f + Math.cos(rotAngle * DEGTORAD));
-                    yf = (float) (yo + 0.1f + Math.cos(rotAngle * DEGTORAD));
+                    xf = xo + 1.0f * Math.cos(rotAngle * DEGTORAD ) ;
+                    yf = yo + 1.0f * Math.sin(rotAngle * DEGTORAD ) ;
+                   
                     this.drawLine(xo, yo, xf, yf);
                     xo = xf;
                     yo = yf;
                     break;
                 
                 case '[' :
-                    currentNode.x = xf;
-                    currentNode.y = yf;
-                    currentNode.angle = rotAngle;
+                    Node currentNode = new Node();
+                    currentNode.x_ = xf;
+                    currentNode.y_ = yf;
+                    currentNode.angle_ = rotAngle;
                     nodes.push(currentNode);
                     break;
                     
                 case ']' :
-                    xo = nodes.peek().x;
-                    yo = nodes.peek().y;
+                    xo = nodes.peek().x_;
+                    yo = nodes.peek().y_;
                     xf = xo;
                     yf = yo;
-                    rotAngle = nodes.peek().angle;
+                    rotAngle = nodes.peek().angle_;
                     nodes.pop();
                     break;
                     
@@ -109,5 +121,25 @@ public class LSystemDraw implements GLEventListener{
             
             i++;
         }
+    }
+    
+    private void drawEjes() {
+        
+        //final GL2 gl = drawable.getGL().getGL2();
+        final GL2 gl = this.autoDrawable.getGL().getGL2();
+        
+        gl.glBegin(GL2.GL_LINES);
+            gl.glColor3f(1.0f, 0.0f, 0.0f);
+            gl.glVertex3f(-50.0f, 0.0f, 0.0f);
+            gl.glVertex3f(50.0f, 0.0f, 0.0f);
+
+            gl.glColor3f(0.0f, 1.0f, 0.0f);
+            gl.glVertex3f(0.0f, -50.0f, 0.0f);
+            gl.glVertex3f(0.0f, 50.0f, 0.0f);
+
+            gl.glColor3f(0.0f, 0.0f, 1.0f);
+            gl.glVertex3f(0.0f, 0.0f, -50.0f);
+            gl.glVertex3f(0.0f, 0.0f, 50.0f);
+        gl.glEnd(); 
     }
 }
