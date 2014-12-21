@@ -37,6 +37,8 @@ public class LSystemDraw implements GLEventListener {
         this.autoDrawable = drawable;
         final GL2 gl = this.autoDrawable.getGL().getGL2();
         
+        System.out.println("Este es una modificacion del codigo");
+        
         gl.glClearColor(0, 0, 0, 1);
         //this.drawEjes();
         

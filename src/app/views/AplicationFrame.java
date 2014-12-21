@@ -118,7 +118,7 @@ public class AplicationFrame extends javax.swing.JFrame {
                 btnAnimationActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnimation, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 130, 40));
+        jPanel1.add(btnAnimation, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, 130, 40));
 
         btnGenerateProd.setText("Dibujar L-System");
         btnGenerateProd.addActionListener(new java.awt.event.ActionListener() {
@@ -126,7 +126,7 @@ public class AplicationFrame extends javax.swing.JFrame {
                 btnGenerateProdActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGenerateProd, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 140, 37));
+        jPanel1.add(btnGenerateProd, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 140, 37));
 
         lstTime.setBorder(javax.swing.BorderFactory.createTitledBorder("Tiempo de crecimiento"));
         lstTime.setModel(new javax.swing.AbstractListModel() {
@@ -137,16 +137,16 @@ public class AplicationFrame extends javax.swing.JFrame {
         lstTime.setSelectedIndex(1);
         jScrollPane2.setViewportView(lstTime);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 28, 145, 114));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 28, 145, 180));
 
         btnRotationX.setText("Rotar X");
-        jPanel1.add(btnRotationX, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 230, 138, -1));
+        jPanel1.add(btnRotationX, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 138, -1));
 
         btnRotationY.setText("Rotar Y");
-        jPanel1.add(btnRotationY, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 259, 138, -1));
+        jPanel1.add(btnRotationY, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 560, 138, -1));
 
         btnRotationZ.setText("Rotar Z");
-        jPanel1.add(btnRotationZ, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 288, 138, -1));
+        jPanel1.add(btnRotationZ, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 590, 138, -1));
 
         txaLogs.setColumns(20);
         txaLogs.setLineWrap(true);
@@ -259,9 +259,7 @@ public class AplicationFrame extends javax.swing.JFrame {
         };
         
         new Thread(runnable).start();
-        
-        
-
+               
     }//GEN-LAST:event_btnGenerateProdActionPerformed
 
     public static void main(String args[]) {
