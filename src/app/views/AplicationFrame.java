@@ -60,10 +60,11 @@ public class AplicationFrame extends javax.swing.JFrame {
         glcanvas = new GLCanvas(capabilities);
         glcanvas.setSize(widthCanvas, heightCanvas);
 
-        // Load scene and add to canvas
+        /// Load scene and add to canvas
         //CubeTexture cubeTexture = new CubeTexture();
         //glcanvas.addGLEventListener(cubeTexture);
-        // Add scene panel
+        
+        /// Add scene panel
         pnlRender.add(glcanvas);
         this.pack();
 
@@ -220,7 +221,7 @@ public class AplicationFrame extends javax.swing.JFrame {
 
     private void btnGenerateProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateProdActionPerformed
 
-        // Capturas el tiempo de crecimiento
+        // Captura el tiempo de crecimiento
         int time = this.lstTime.getSelectedIndex() + 1;
         System.out.println("Time is: " + time);
 
@@ -231,35 +232,34 @@ public class AplicationFrame extends javax.swing.JFrame {
             cad += productions.getProduction(i) + "\n\n";
         }
         this.txaLogs.setText(cad);
-
-        // Creammo el objeto
-        if (lsd == null) {
-            lsd = new LSystemDraw(productions.getProductions(), 25.7f);
-            glcanvas.addGLEventListener(lsd);
-            System.out.println("Creando nuevo objeto");
-        }
         
-        // Asigamos el nivel de produccion
+        // Agregamos las producciones al objeto a dibujar
+        lsd = new LSystemDraw(productions.getProductions(), 25.7f);
+        glcanvas.addGLEventListener(lsd);
+        
+        // Creamos nuevas producciones para un posterior dibujado
+        this.createProductions();
+        
+        // Iniciamos el crecimiento del arbol en un hilo
         Runnable runnable = new Runnable() {
 
             @Override
             public void run() {
                 for (int i = 0; i <= 4; i++) {
+                    lsd.setCurrentProduction(i);
+                    glcanvas.display();
 
                     try {
                         Thread.sleep(time * 1000);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(AplicationFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
-                    lsd.setCurrentProduction(i);
-                    glcanvas.display();
                 }
             }
         };
-        
+
         new Thread(runnable).start();
-               
+
     }//GEN-LAST:event_btnGenerateProdActionPerformed
 
     public static void main(String args[]) {
