@@ -1,6 +1,9 @@
 package app.algorithms;
 
+import com.jogamp.opengl.util.texture.TextureIO;
 import java.awt.DisplayMode;
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
 import java.util.Vector;
 import javax.media.opengl.GL2;
@@ -9,14 +12,15 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
 public class LSystemDraw implements GLEventListener {
-    
+
+    private GLAutoDrawable autoDrawable;
     public static DisplayMode dm, dm_old;
     private GLU glu = new GLU();
-    
+    private int texture;
+
     private Vector<String> productions;
     private float angle;
     private int currentProduction;
-    private GLAutoDrawable autoDrawable;
 
     private static final float DEGTORAD = 0.0174532925199432957f;
 
@@ -29,6 +33,23 @@ public class LSystemDraw implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         
+        final GL2 gl = drawable.getGL().getGL2();
+      
+        gl.glShadeModel(GL2.GL_SMOOTH);
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        gl.glClearDepth(1.0f);
+        gl.glEnable(GL2.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL2.GL_LEQUAL);
+        gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
+
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        try {
+            File im = new File("textures/background.jpg");
+            com.jogamp.opengl.util.texture.Texture t = TextureIO.newTexture(im, true);
+            texture = t.getTextureObject(gl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -39,28 +60,34 @@ public class LSystemDraw implements GLEventListener {
     @Override
     public void display(GLAutoDrawable drawable) {
         this.autoDrawable = drawable;
-        
+
         final GL2 gl = this.autoDrawable.getGL().getGL2();
-        gl.glClear( GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT );     
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        gl.glTranslatef( 0f, 0f, -5.0f ); 
-
-        //this.drawEjes();
-
+        gl.glTranslatef(0f, 0f, -5.0f);
+        //gl.glClearColor(1, 1, 1, 1);
+        
+        // Background
+        this.drawBackground();
+        
+        // Tree
         gl.glPushMatrix();
-        gl.glScalef(0.05f, 0.05f, 0.05f);
-        gl.glColor3f(0, 1, 0);
-        this.drawLSystem(productions.get(currentProduction), 1, -40);
+            gl.glScalef(0.05f, 0.05f, 0.05f);
+            this.drawLSystem(productions.get(currentProduction), 1, -40);
         gl.glPopMatrix();
     }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        
         final GL2 gl = drawable.getGL().getGL2();
+        
         if (height <= 0) {
             height = 1;
         }
+        
         final float h = (float) width / (float) height;
+        
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
@@ -70,7 +97,6 @@ public class LSystemDraw implements GLEventListener {
     }
 
     private class Node {
-
         public double x_ = 0.0f;
         public double y_ = 0.0f;
         public double angle_ = 0.0f;
@@ -81,9 +107,8 @@ public class LSystemDraw implements GLEventListener {
         final GL2 gl = this.autoDrawable.getGL().getGL2();
 
         gl.glBegin(GL2.GL_LINES);
-
-        gl.glVertex3d(x1, y1, 0);
-        gl.glVertex3d(x2, y2, 0);
+            gl.glVertex3d(x1, y1, 0);
+            gl.glVertex3d(x2, y2, 0);
         gl.glEnd();
     }
 
@@ -106,7 +131,6 @@ public class LSystemDraw implements GLEventListener {
                 case 'F':
                     xf = xo + 1.0f * Math.cos(rotAngle * DEGTORAD);
                     yf = yo + 1.0f * Math.sin(rotAngle * DEGTORAD);
-
                     this.drawLine(xo, yo, xf, yf);
                     xo = xf;
                     yo = yf;
@@ -141,10 +165,36 @@ public class LSystemDraw implements GLEventListener {
             i++;
         }
     }
+    
+    private void drawBackground() {
+        
+        final GL2 gl = this.autoDrawable.getGL().getGL2();
+        
+        float size = 2.6f;
+        float x = size * 1.56f;
+        float y = size;
+        
+        System.out.println("x = " + x);
+        System.out.println("y = " + y);
+        
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
+        gl.glBegin(GL2.GL_QUADS);
+            gl.glTexCoord2f(0.0f, 0.0f);
+            gl.glVertex3f(x, y, -1.0f);
+            
+            gl.glTexCoord2f(1.0f, 0.0f);
+            gl.glVertex3f(-x, y, -1.0f);
+            
+            gl.glTexCoord2f(1.0f, 1.0f);
+            gl.glVertex3f(-x, -y, -1.0f);
+            
+            gl.glTexCoord2f(0.0f, 1.0f);
+            gl.glVertex3f(x, -y, -1.0f);
+        gl.glEnd();
+    }
 
     private void drawEjes() {
 
-        //final GL2 gl = drawable.getGL().getGL2();
         final GL2 gl = this.autoDrawable.getGL().getGL2();
 
         gl.glBegin(GL2.GL_LINES);
