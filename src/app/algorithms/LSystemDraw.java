@@ -7,10 +7,11 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 
-public class LSystemDraw implements GLEventListener{
+public class LSystemDraw implements GLEventListener {
            
     private Vector<String> productions;
     private float angle;
+    private int currentProduction;
     private GLAutoDrawable autoDrawable;
     
     private static final float DEGTORAD = 0.0174532925199432957f ;
@@ -18,6 +19,7 @@ public class LSystemDraw implements GLEventListener{
     public LSystemDraw(Vector<String> productions, float angle) {
         this.productions = productions;
         this.angle = angle;
+        this.currentProduction = 0;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class LSystemDraw implements GLEventListener{
         gl.glPushMatrix();
         gl.glScalef(0.04f, 0.04f, 0.04f);
         gl.glColor3f(0, 1, 0);
-        this.drawLSystem(productions.get(4), 1, -25);
+        this.drawLSystem(productions.get(currentProduction), 1, -25);
         gl.glPopMatrix();
     }
 
@@ -142,4 +144,13 @@ public class LSystemDraw implements GLEventListener{
             gl.glVertex3f(0.0f, 0.0f, 50.0f);
         gl.glEnd(); 
     }
+
+    public int getCurrentProduction() {
+        return currentProduction;
+    }
+
+    public void setCurrentProduction(int currentProduction) {
+        this.currentProduction = currentProduction;
+    }
+    
 }
