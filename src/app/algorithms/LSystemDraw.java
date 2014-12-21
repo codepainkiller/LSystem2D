@@ -1,6 +1,9 @@
 
 package app.algorithms;
 
+import com.jogamp.opengl.util.texture.TextureIO;
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
 import java.util.Vector;
 import javax.media.opengl.GL2;
@@ -13,6 +16,7 @@ public class LSystemDraw implements GLEventListener {
     private float angle;
     private int currentProduction;
     private GLAutoDrawable autoDrawable;
+     private int texture;
     
     private static final float DEGTORAD = 0.0174532925199432957f ;
        
@@ -24,6 +28,16 @@ public class LSystemDraw implements GLEventListener {
 
     @Override
     public void init(GLAutoDrawable drawable) {
+        final GL2 gl = drawable.getGL().getGL2();
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        try {
+            File im = new File("textures/paisa.jpg");
+            com.jogamp.opengl.util.texture.Texture t = TextureIO.newTexture(im, true);
+            texture = t.getTextureObject(gl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       
        
     }
 
@@ -39,6 +53,22 @@ public class LSystemDraw implements GLEventListener {
         
         gl.glClearColor(0, 0, 0, 1);
         //this.drawEjes();
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
+        
+        gl.glPushMatrix();
+        gl.glTranslatef(0f, 0f, -0.09f);
+        gl.glBegin(GL2.GL_QUADS);
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, 1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, 1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
         
         gl.glPushMatrix();
         gl.glScalef(0.04f, 0.04f, 0.04f);
