@@ -334,21 +334,21 @@ public class TwoGrammar implements GLEventListener {
         float size = 2.6f;
         float x = size * 1.56f;
         float y = size;
-
+        
         gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
         gl.glBegin(GL2.GL_QUADS);
-            gl.glColor3f(1, 1, 1);
-            gl.glTexCoord2f(0.0f, 0.0f);
-            gl.glVertex3f(x, y, -1.0f);
-            gl.glColor3f(1, 1, 1);
-            gl.glTexCoord2f(1.0f, 0.0f);
-            gl.glVertex3f(-x, y, -1.0f);
-            gl.glColor3f(1, 1, 1);
-            gl.glTexCoord2f(1.0f, 1.0f);
-            gl.glVertex3f(-x, -y, -1.0f);
-            gl.glColor3f(1, 1, 1);
-            gl.glTexCoord2f(0.0f, 1.0f);
-            gl.glVertex3f(x, -y, -1.0f);
+        gl.glColor3f(1, 1, 1);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(x, y, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(-x, y, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(-x, -y, -1.0f);
+
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(x, -y, -1.0f);
         gl.glEnd();
     }
 
