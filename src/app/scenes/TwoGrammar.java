@@ -18,6 +18,7 @@ public class TwoGrammar implements GLEventListener {
     private GLU glu = new GLU();
     private int texture;
     private int timeGrowing = 1;
+    private int indexbackground = 1;
 
     private Vector<String> productions;
     private float angle;
@@ -44,8 +45,11 @@ public class TwoGrammar implements GLEventListener {
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 
         gl.glEnable(GL2.GL_TEXTURE_2D);
+        
+        String pathTexture = "textures/background" + Integer.toString(indexbackground) + ".jpg";
+        
         try {
-            File im = new File("textures/background.jpg");
+            File im = new File(pathTexture);
             com.jogamp.opengl.util.texture.Texture t = TextureIO.newTexture(im, true);
             texture = t.getTextureObject(gl);
         } catch (IOException e) {
@@ -68,7 +72,7 @@ public class TwoGrammar implements GLEventListener {
         gl.glTranslatef(0f, 0f, -5.0f);
 
         // Background
-        //this.drawBackground();
+        this.drawBackground();
         
         // Tree
         gl.glPushMatrix();
@@ -306,22 +310,20 @@ public class TwoGrammar implements GLEventListener {
         float x = size * 1.56f;
         float y = size;
 
-        System.out.println("x = " + x);
-        System.out.println("y = " + y);
-
         gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
         gl.glBegin(GL2.GL_QUADS);
-        gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f(x, y, -1.0f);
+            gl.glColor3f(1, 1, 1);
+            gl.glTexCoord2f(0.0f, 0.0f);
+            gl.glVertex3f(x, y, -1.0f);
 
-        gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(-x, y, -1.0f);
+            gl.glTexCoord2f(1.0f, 0.0f);
+            gl.glVertex3f(-x, y, -1.0f);
 
-        gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(-x, -y, -1.0f);
+            gl.glTexCoord2f(1.0f, 1.0f);
+            gl.glVertex3f(-x, -y, -1.0f);
 
-        gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(x, -y, -1.0f);
+            gl.glTexCoord2f(0.0f, 1.0f);
+            gl.glVertex3f(x, -y, -1.0f);
         gl.glEnd();
     }
 
@@ -357,7 +359,7 @@ public class TwoGrammar implements GLEventListener {
         return timeGrowing;
     }
 
-    public void setTimeGrowing(int timeGrowing) {
+    public void setTimeGrowing(final int timeGrowing) {
         this.timeGrowing = timeGrowing;
         
         Runnable runnable = new Runnable() {
@@ -367,9 +369,9 @@ public class TwoGrammar implements GLEventListener {
                 for (int i = 0; i <= 4; i++) {
                     currentProduction = i;
                     autoDrawable.display();
-
+                    int sleepTime = timeGrowing * 1000;
                     try {                      
-                        Thread.sleep(timeGrowing * 1000);
+                        Thread.sleep(sleepTime);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -379,5 +381,13 @@ public class TwoGrammar implements GLEventListener {
         };
 
         new Thread(runnable).start();
+    }
+
+    public int getIndexbackground() {
+        return indexbackground;
+    }
+
+    public void setIndexbackground(int indexbackground) {
+        this.indexbackground = indexbackground;
     }
 }
