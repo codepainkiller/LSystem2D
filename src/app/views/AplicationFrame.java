@@ -1,12 +1,12 @@
 package app.views;
 
-import app.algorithms.LSystemDraw;
-import app.algorithms.LSystemProduction;
-import app.scenes.CubeTexture;
+import app.algorithms.ProdEstocatic;
+import app.algorithms.ProdOneGrammar;
+import app.algorithms.ProdTwoGrammar;
+import app.scenes.Estocastic;
+import app.scenes.TwoGrammar;
 import com.jogamp.opengl.util.FPSAnimator;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
@@ -19,10 +19,10 @@ public class AplicationFrame extends javax.swing.JFrame {
     private GLCapabilities capabilities;
     private int widthCanvas;
     private int heightCanvas;
-    private boolean animationScene;
 
-    private LSystemProduction productions;
-    private LSystemDraw lsd;
+    private Vector<String> productions;
+    private Estocastic lsd;
+    TwoGrammar tg;
 
     private static final int NUM_PRODUCTIONS = 4;
 
@@ -30,7 +30,7 @@ public class AplicationFrame extends javax.swing.JFrame {
 
         initComponents();
 
-        this.initScene();
+        this.initRenderSettings();
         this.createProductions();
     }
 
@@ -42,12 +42,9 @@ public class AplicationFrame extends javax.swing.JFrame {
         rules.add("F[+F]F[-F]F");
         rules.add("F[+F]F");
         rules.add("F[-F]F");
-
-        productions = new LSystemProduction(axiom, rules, NUM_PRODUCTIONS);
-        productions.start();
     }
 
-    private void initScene() {
+    private void initRenderSettings() {
 
         // Capture panel size
         widthCanvas = pnlRender.getWidth();
@@ -60,17 +57,9 @@ public class AplicationFrame extends javax.swing.JFrame {
         glcanvas = new GLCanvas(capabilities);
         glcanvas.setSize(widthCanvas, heightCanvas);
 
-        /// Load scene and add to canvas
-        //CubeTexture cubeTexture = new CubeTexture();
-        //glcanvas.addGLEventListener(cubeTexture);
-        
         /// Add scene panel
         pnlRender.add(glcanvas);
         this.pack();
-
-        // Instance animator
-        animator = new FPSAnimator(glcanvas, 500, true);
-        animationScene = false;
     }
 
     @SuppressWarnings("unchecked")
@@ -79,15 +68,13 @@ public class AplicationFrame extends javax.swing.JFrame {
 
         pnlRender = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        btnAnimation = new javax.swing.JButton();
         btnGenerateProd = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        lstTime = new javax.swing.JList();
-        btnRotationX = new javax.swing.JButton();
-        btnRotationY = new javax.swing.JButton();
-        btnRotationZ = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        lstScenes = new javax.swing.JList();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaLogs = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        lstTime = new javax.swing.JList();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -103,23 +90,14 @@ public class AplicationFrame extends javax.swing.JFrame {
         pnlRender.setLayout(pnlRenderLayout);
         pnlRenderLayout.setHorizontalGroup(
             pnlRenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 849, Short.MAX_VALUE)
+            .addGap(0, 952, Short.MAX_VALUE)
         );
         pnlRenderLayout.setVerticalGroup(
             pnlRenderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 577, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Parametros", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btnAnimation.setText("No tocar :v");
-        btnAnimation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnimationActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnAnimation, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, 130, 40));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         btnGenerateProd.setText("Dibujar L-System");
         btnGenerateProd.addActionListener(new java.awt.event.ActionListener() {
@@ -127,34 +105,66 @@ public class AplicationFrame extends javax.swing.JFrame {
                 btnGenerateProdActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGenerateProd, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 140, 37));
 
-        lstTime.setBorder(javax.swing.BorderFactory.createTitledBorder("Tiempo de crecimiento"));
-        lstTime.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "1 segundo", "2  segundos", "3  segundos", "4  segundos", "5  segundos", "6  segundos", "7  segundos", "8  segundos", "9  segundos", "10 segundos" };
+        lstScenes.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Escenas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        lstScenes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lstScenes.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Escena 1", "Escena 2", "Escena 3", "Escena 4" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        lstTime.setSelectedIndex(1);
-        jScrollPane2.setViewportView(lstTime);
-
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 28, 145, 180));
-
-        btnRotationX.setText("Rotar X");
-        jPanel1.add(btnRotationX, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 138, -1));
-
-        btnRotationY.setText("Rotar Y");
-        jPanel1.add(btnRotationY, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 560, 138, -1));
-
-        btnRotationZ.setText("Rotar Z");
-        jPanel1.add(btnRotationZ, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 590, 138, -1));
+        lstScenes.setSelectedIndex(0);
+        jScrollPane3.setViewportView(lstScenes);
 
         txaLogs.setColumns(20);
         txaLogs.setLineWrap(true);
         txaLogs.setRows(5);
         txaLogs.setWrapStyleWord(true);
-        txaLogs.setBorder(javax.swing.BorderFactory.createTitledBorder("Producciones"));
+        txaLogs.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Producciones", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
         jScrollPane1.setViewportView(txaLogs);
+
+        lstTime.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Crecimiento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        lstTime.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lstTime.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "1 segundo", "2  segundos", "3  segundos", "4  segundos", "5  segundos", "6  segundos", "7  segundos", "8  segundos", "9  segundos", "10 segundos" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        lstTime.setSelectedIndex(0);
+        jScrollPane4.setViewportView(lstTime);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane4))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnGenerateProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnGenerateProd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         jMenu1.setText("File");
 
@@ -180,14 +190,10 @@ public class AplicationFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(pnlRender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                .addComponent(pnlRender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -195,10 +201,7 @@ public class AplicationFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(pnlRender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+                    .addComponent(pnlRender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -206,59 +209,48 @@ public class AplicationFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAnimationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnimationActionPerformed
-
-        if (!animationScene) {
-            animationScene = !animationScene;
-            animator.start();
-            this.btnAnimation.setText("Stop animation!");
-        } else {
-            animationScene = !animationScene;
-            animator.stop();
-            this.btnAnimation.setText("Start animation!");
-        }
-    }//GEN-LAST:event_btnAnimationActionPerformed
-
     private void btnGenerateProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateProdActionPerformed
 
-        // Captura el tiempo de crecimiento
-        int time = this.lstTime.getSelectedIndex() + 1;
-        System.out.println("Time is: " + time);
+        // Captura el tiempo y numero de escena
+        int timeGrowing = this.lstTime.getSelectedIndex() + 1;
+        int numScene = this.lstScenes.getSelectedIndex() + 1;
+
+        if (numScene == 1) {
+
+            ProdTwoGrammar grammar = new ProdTwoGrammar("X", "F-[[X]+X]+F[+FX]-X", "FF", 4);
+            productions = grammar.getProductions();
+            tg = new TwoGrammar(productions, 25.0f);
+
+        } else if (numScene == 2) {
+
+            ProdTwoGrammar grammar = new ProdTwoGrammar("X", "FX[-F[X]-X][X+X][+F[X]+X]", "FF", 4);
+            productions = grammar.getProductions();
+            tg = new TwoGrammar(productions, 22.5f);
+
+        } else if (numScene == 3) {
+
+            ProdTwoGrammar grammar = new ProdTwoGrammar("X", "F[+X]F[-X]+X", "FF", 4);
+            productions = grammar.getProductions();
+            tg = new TwoGrammar(productions, 20.0f);
+
+        } else if (numScene == 4) {
+
+            ProdTwoGrammar grammar = new ProdTwoGrammar("X", "F[+X][-X]F[+X][-X]FX", "FF", 4);
+            productions = grammar.getProductions();
+            tg = new TwoGrammar(productions, 30.0f);
+
+        }
+
+        glcanvas.addGLEventListener(tg);
+        glcanvas.display();
+        tg.setTimeGrowing(timeGrowing);
 
         // Mostrando producciones en el Frame
         String cad = "";
-
-        for (int i = 0; i < productions.getProductions().size(); i++) {
-            cad += productions.getProduction(i) + "\n\n";
-        }
+        for (int i = 0; i < productions.size(); i++) 
+            cad += productions.get(i) + "\n\n";
+        
         this.txaLogs.setText(cad);
-        
-        // Agregamos las producciones al objeto a dibujar
-        lsd = new LSystemDraw(productions.getProductions(), 25.7f);
-        glcanvas.addGLEventListener(lsd);
-        
-        // Creamos nuevas producciones para un posterior dibujado
-        this.createProductions();
-        
-        // Iniciamos el crecimiento del arbol en un hilo
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-                for (int i = 0; i <= 4; i++) {
-                    lsd.setCurrentProduction(i);
-                    glcanvas.display();
-
-                    try {
-                        Thread.sleep(time * 1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(AplicationFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        };
-
-        new Thread(runnable).start();
 
     }//GEN-LAST:event_btnGenerateProdActionPerformed
 
@@ -291,11 +283,7 @@ public class AplicationFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnimation;
     private javax.swing.JButton btnGenerateProd;
-    private javax.swing.JButton btnRotationX;
-    private javax.swing.JButton btnRotationY;
-    private javax.swing.JButton btnRotationZ;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -304,7 +292,9 @@ public class AplicationFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JList lstScenes;
     private javax.swing.JList lstTime;
     private javax.swing.JPanel pnlRender;
     private javax.swing.JTextArea txaLogs;

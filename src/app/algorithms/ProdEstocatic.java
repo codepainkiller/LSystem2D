@@ -2,14 +2,14 @@ package app.algorithms;
 
 import java.util.Vector;
 
-public class LSystemProduction extends Thread {
+public class ProdEstocatic extends Thread {
 
     private String axiom;
     private Vector<String> rules;
     private Vector<String> productions;
     private int numProductions;
 
-    public LSystemProduction(String axiom, Vector<String> rules, int numProductions) {
+    public ProdEstocatic(String axiom, Vector<String> rules, int numProductions) {
         this.axiom = axiom;
         this.rules = rules;
         this.numProductions = numProductions;

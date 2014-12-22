@@ -1,6 +1,6 @@
 package app.views;
 
-import app.algorithms.LSystemProduction;
+import app.algorithms.ProdEstocatic;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +20,7 @@ public class Main {
         rules.add("F[+F]F");
         rules.add("F[-F]F");
         
-        LSystemProduction productions = new LSystemProduction(axiom, rules, 4);
+        ProdEstocatic productions = new ProdEstocatic(axiom, rules, 4);
         productions.start();
         */
     

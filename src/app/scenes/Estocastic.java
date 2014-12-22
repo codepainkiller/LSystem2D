@@ -1,4 +1,4 @@
-package app.algorithms;
+package app.scenes;
 
 import com.jogamp.opengl.util.texture.TextureIO;
 import java.awt.DisplayMode;
@@ -11,7 +11,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
-public class LSystemDraw implements GLEventListener {
+public class Estocastic implements GLEventListener {
 
     private GLAutoDrawable autoDrawable;
     public static DisplayMode dm, dm_old;
@@ -24,7 +24,7 @@ public class LSystemDraw implements GLEventListener {
 
     private static final float DEGTORAD = 0.0174532925199432957f;
 
-    public LSystemDraw(Vector<String> productions, float angle) {
+    public Estocastic(Vector<String> productions, float angle) {
         this.productions = productions;
         this.angle = angle;
         this.currentProduction = 0;
@@ -32,9 +32,9 @@ public class LSystemDraw implements GLEventListener {
 
     @Override
     public void init(GLAutoDrawable drawable) {
-        
+
         final GL2 gl = drawable.getGL().getGL2();
-      
+
         gl.glShadeModel(GL2.GL_SMOOTH);
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         gl.glClearDepth(1.0f);
@@ -66,28 +66,35 @@ public class LSystemDraw implements GLEventListener {
         gl.glLoadIdentity();
         gl.glTranslatef(0f, 0f, -5.0f);
         //gl.glClearColor(1, 1, 1, 1);
-        
+
         // Background
-        this.drawBackground();
-        
+        //this.drawBackground();
+
         // Tree
         gl.glPushMatrix();
-            gl.glScalef(0.05f, 0.05f, 0.05f);
-            this.drawLSystem(productions.get(currentProduction), 1, -40);
+        gl.glScalef(0.05f, 0.05f, 0.05f);
+        gl.glColor3d(0, 1, 0);
+        this.drawLSystem(productions.get(1), -3, -40);
+        this.drawLSystem(productions.get(2), -1, -40);
+        this.drawLSystem(productions.get(1), 0, -40);
+        this.drawLSystem(productions.get(1), 2, -40);
+        this.drawLSystem(productions.get(2), 3, -40);
+
+        this.drawLSystem(productions.get(currentProduction), 1, -40);
         gl.glPopMatrix();
     }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        
+
         final GL2 gl = drawable.getGL().getGL2();
-        
+
         if (height <= 0) {
             height = 1;
         }
-        
+
         final float h = (float) width / (float) height;
-        
+
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
@@ -97,6 +104,7 @@ public class LSystemDraw implements GLEventListener {
     }
 
     private class Node {
+
         public double x_ = 0.0f;
         public double y_ = 0.0f;
         public double angle_ = 0.0f;
@@ -107,8 +115,8 @@ public class LSystemDraw implements GLEventListener {
         final GL2 gl = this.autoDrawable.getGL().getGL2();
 
         gl.glBegin(GL2.GL_LINES);
-            gl.glVertex3d(x1, y1, 0);
-            gl.glVertex3d(x2, y2, 0);
+        gl.glVertex3d(x1, y1, 0);
+        gl.glVertex3d(x2, y2, 0);
         gl.glEnd();
     }
 
@@ -165,31 +173,31 @@ public class LSystemDraw implements GLEventListener {
             i++;
         }
     }
-    
+
     private void drawBackground() {
-        
+
         final GL2 gl = this.autoDrawable.getGL().getGL2();
-        
+
         float size = 2.6f;
         float x = size * 1.56f;
         float y = size;
-        
+
         System.out.println("x = " + x);
         System.out.println("y = " + y);
-        
+
         gl.glBindTexture(GL2.GL_TEXTURE_2D, texture);
         gl.glBegin(GL2.GL_QUADS);
-            gl.glTexCoord2f(0.0f, 0.0f);
-            gl.glVertex3f(x, y, -1.0f);
-            
-            gl.glTexCoord2f(1.0f, 0.0f);
-            gl.glVertex3f(-x, y, -1.0f);
-            
-            gl.glTexCoord2f(1.0f, 1.0f);
-            gl.glVertex3f(-x, -y, -1.0f);
-            
-            gl.glTexCoord2f(0.0f, 1.0f);
-            gl.glVertex3f(x, -y, -1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(x, y, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(-x, y, -1.0f);
+
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(-x, -y, -1.0f);
+
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(x, -y, -1.0f);
         gl.glEnd();
     }
 
