@@ -4,32 +4,18 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jMenuItem2"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jMenuItem1"/>
-              </Properties>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Edit"/>
-          </Properties>
-          <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jMenuItem3"/>
+                <Property name="text" type="java.lang.String" value="Salir"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -296,19 +282,15 @@
                   <Font name="Tahoma" size="12" style="0"/>
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="9">
+                  <StringArray count="5">
                     <StringItem index="0" value="Fondo 1"/>
                     <StringItem index="1" value="Fondo 2"/>
                     <StringItem index="2" value="Fondo 3"/>
                     <StringItem index="3" value="Fondo 4"/>
                     <StringItem index="4" value="Fondo 5"/>
-                    <StringItem index="5" value="Fondo 6"/>
-                    <StringItem index="6" value="Fondo 7"/>
-                    <StringItem index="7" value="Fondo 8"/>
-                    <StringItem index="8" value=" "/>
                   </StringArray>
                 </Property>
-                <Property name="selectedIndex" type="int" value="0"/>
+                <Property name="selectedIndex" type="int" value="1"/>
               </Properties>
             </Component>
           </SubComponents>

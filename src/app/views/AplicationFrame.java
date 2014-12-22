@@ -78,9 +78,6 @@ public class AplicationFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         lstBackground = new javax.swing.JList();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -138,11 +135,11 @@ public class AplicationFrame extends javax.swing.JFrame {
         lstBackground.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Background", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
         lstBackground.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lstBackground.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Fondo 1", "Fondo 2", "Fondo 3", "Fondo 4", "Fondo 5", "Fondo 6", "Fondo 7", "Fondo 8", " " };
+            String[] strings = { "Fondo 1", "Fondo 2", "Fondo 3", "Fondo 4", "Fondo 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        lstBackground.setSelectedIndex(0);
+        lstBackground.setSelectedIndex(1);
         jScrollPane2.setViewportView(lstBackground);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -184,19 +181,14 @@ public class AplicationFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jMenu1.setText("File");
+        jMenu2.setText("File");
 
-        jMenuItem2.setText("jMenuItem2");
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-
-        jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.setText("Salir");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem3);
 
         jMenuBar1.add(jMenu2);
@@ -264,6 +256,7 @@ public class AplicationFrame extends javax.swing.JFrame {
         glcanvas.addGLEventListener(tg);
         glcanvas.display();
         tg.setTimeGrowing(timeGrowing);
+        
 
         // Mostrando producciones en el Frame
         String cad = "";
@@ -273,6 +266,10 @@ public class AplicationFrame extends javax.swing.JFrame {
         this.txaLogs.setText(cad);
 
     }//GEN-LAST:event_btnGenerateProdActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     public static void main(String args[]) {
 
@@ -304,11 +301,8 @@ public class AplicationFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateProd;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -4,6 +4,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
 import java.awt.DisplayMode;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
 import javax.media.opengl.GL2;
@@ -18,7 +19,7 @@ public class TwoGrammar implements GLEventListener {
     private GLU glu = new GLU();
     private int texture;
     private int timeGrowing = 1;
-    private int indexbackground = 1;
+    private int indexbackground = 2;
 
     private Vector<String> productions;
     private float angle;
@@ -70,7 +71,7 @@ public class TwoGrammar implements GLEventListener {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
         gl.glTranslatef(0f, 0f, -5.0f);
-
+        
         // Background
         this.drawBackground();
         
@@ -113,6 +114,9 @@ public class TwoGrammar implements GLEventListener {
 
         double xm = (x1 + x2) / 2;
         double ym = (y1 + y2) / 2;
+        
+        gl.glColor3f(139 / 255.0f, 134 / 255.0f, 130 / 255.0f);
+        gl.glLineWidth(4);
 
         gl.glBegin(GL2.GL_LINES);
         gl.glVertex3d(x1, y1, 0);
@@ -131,7 +135,6 @@ public class TwoGrammar implements GLEventListener {
         gl.glVertex3d(x1, y1, 0);
         gl.glVertex3d(xm + 1, ym + 0.5, 0);
         gl.glVertex3d(x2 + 2, y2, 0);
-        //gl.glVertex3d(xm-1.5, ym, 0);
         gl.glEnd();
     }
 
@@ -145,8 +148,7 @@ public class TwoGrammar implements GLEventListener {
         float x = (float) x1;
         float y = (float) y1;
         float a = 1.5f;
-
-        gl.glColor3d(162 / 255.0f, 205 / 255.0f, 90 / 255.0f);
+        
         gl.glBegin(GL2.GL_POLYGON);
         gl.glVertex3f(x, y, 0);
         gl.glVertex3f((float) (x + 0.2 * a), (float) (y - 0.15 * a), 0);
@@ -185,7 +187,7 @@ public class TwoGrammar implements GLEventListener {
 
     }
 
-    private void drawSheet3(double x1, double y1) {
+    private void drawSheet3(double x1, double y1, double x2, double y2) {
 
         final GL2 gl = this.autoDrawable.getGL().getGL2();
 
@@ -193,7 +195,6 @@ public class TwoGrammar implements GLEventListener {
         float y = (float) y1;
         float a = 3f;
 
-        gl.glColor3d(162 / 255.0f, 205 / 255.0f, 90 / 255.0f);
         gl.glBegin(GL2.GL_POLYGON);
         gl.glVertex3f(x, y, 0);
         gl.glVertex3f((float) (x + 0.5 * a), (float) (y + 0.6 * a), 0);
@@ -204,15 +205,14 @@ public class TwoGrammar implements GLEventListener {
         gl.glEnd();
     }
     
-    private void drawSheet4(double x1, double y1) {
+    private void drawSheet4(double x1, double y1, double x2, double y2) {
 
         final GL2 gl = this.autoDrawable.getGL().getGL2();
 
         float x = (float) x1;
         float y = (float) y1;
         float a = 3f;
-        
-        gl.glColor3d(162 / 255.0f, 205 / 255.0f, 90 / 255.0f);
+
         gl.glBegin(GL2.GL_POLYGON);
             gl.glVertex3f(  x       , y  , 0);
             gl.glVertex3f((float) (x+0.3 *a),(float) (y+0.2 *a)  ,0);       
@@ -229,6 +229,34 @@ public class TwoGrammar implements GLEventListener {
 	    gl.glVertex3f((float) (x-0.2 *a),(float) (y+0.2 *a)  ,0);
 	    gl.glVertex3f((float) (x-0.3 *a),(float) (y+0.2 *a)  ,0); 
             gl.glEnd();
+    }
+    
+    private void drawSheet(double x1, double y1, double x2, double y2) {
+        final GL2 gl = this.autoDrawable.getGL().getGL2();
+        
+        Random rand = new Random();
+        int sheet = rand.nextInt((4-1) + 1) + 1;
+        //System.out.println("Rand = " + sheet);
+        
+        gl.glLineWidth(1);
+        
+        if (sheet == 1) {
+            gl.glColor3f(148/255f,200/255f,184/255f);
+            this.drawSheet1(x1, y1, x2, y2);
+        }
+        else if (sheet == 2){
+            gl.glColor3f(252/255f ,251/255f , 153/255f);
+            this.drawSheet2(x1, y1, x2, y2);
+        }
+        else if (sheet == 3){
+            gl.glColor3f(242/225f, 156/255f, 168/255f);
+            this.drawSheet3(x1, y1, x2, y2);
+        }
+        else if (sheet == 4){
+            gl.glColor3f(243/255f ,181/255f , 116/255f);
+            this.drawSheet4(x1, y1, x2, y2);
+        }
+            
     }
 
     public void drawLSystem(String word, double initX, double initY) {
@@ -253,8 +281,6 @@ public class TwoGrammar implements GLEventListener {
                     xf = xo + 1.0f * Math.cos(rotAngle * DEGTORAD);
                     yf = yo + 1.0f * Math.sin(rotAngle * DEGTORAD);
 
-                    gl.glColor3d(139 / 255.0f, 134 / 255.0f, 130 / 255.0f);
-                    gl.glLineWidth(4);
                     this.drawLine(xo, yo, xf, yf);
 
                     xo = xf;
@@ -265,8 +291,7 @@ public class TwoGrammar implements GLEventListener {
                     xf = xo + 1.0f * Math.cos(rotAngle * DEGTORAD);
                     yf = yo + 1.0f * Math.sin(rotAngle * DEGTORAD);
                     
-                    gl.glColor3d(69 / 255.0f, 139 / 255.0f, 0);
-                    this.drawSheet2(xo, yo, xf, yf);
+                    this.drawSheet(xo, yo, xf, yf);
                     
                     xo = xf;
                     yo = yf;
@@ -315,36 +340,18 @@ public class TwoGrammar implements GLEventListener {
             gl.glColor3f(1, 1, 1);
             gl.glTexCoord2f(0.0f, 0.0f);
             gl.glVertex3f(x, y, -1.0f);
-
+            gl.glColor3f(1, 1, 1);
             gl.glTexCoord2f(1.0f, 0.0f);
             gl.glVertex3f(-x, y, -1.0f);
-
+            gl.glColor3f(1, 1, 1);
             gl.glTexCoord2f(1.0f, 1.0f);
             gl.glVertex3f(-x, -y, -1.0f);
-
+            gl.glColor3f(1, 1, 1);
             gl.glTexCoord2f(0.0f, 1.0f);
             gl.glVertex3f(x, -y, -1.0f);
         gl.glEnd();
     }
 
-    private void drawEjes() {
-
-        final GL2 gl = this.autoDrawable.getGL().getGL2();
-
-        gl.glBegin(GL2.GL_LINES);
-        gl.glColor3f(1.0f, 0.0f, 0.0f);
-        gl.glVertex3f(-50.0f, 0.0f, 0.0f);
-        gl.glVertex3f(50.0f, 0.0f, 0.0f);
-
-        gl.glColor3f(0.0f, 1.0f, 0.0f);
-        gl.glVertex3f(0.0f, -50.0f, 0.0f);
-        gl.glVertex3f(0.0f, 50.0f, 0.0f);
-
-        gl.glColor3f(0.0f, 0.0f, 1.0f);
-        gl.glVertex3f(0.0f, 0.0f, -50.0f);
-        gl.glVertex3f(0.0f, 0.0f, 50.0f);
-        gl.glEnd();
-    }
 
     public int getCurrentProduction() {
         return currentProduction;
@@ -375,7 +382,7 @@ public class TwoGrammar implements GLEventListener {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    System.out.println("Time: " + i);
+
                 }
             }
         };
