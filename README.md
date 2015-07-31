@@ -1,4 +1,4 @@
-# proyecto-grafica2
+# L-System 2D - Simulador de Crecimiento
 Simulador L-System 2D (Java) -  Computación Gráfica II UNT
 
 Library: http://www.jogamp.org/
